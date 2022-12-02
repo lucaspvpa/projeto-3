@@ -5,13 +5,26 @@ const bodyParser = require("body-parser");
 const Usuario = require('./model/usuario');
 const Publicacao = require('./model/publicacao');
 const bd = require('./model/bd');
+const jwt = require('jsonwebtoken');
+const secret = 'super-secret-key';
+
+function verifyJWT(req, res, next) {
+    if (!req.headers.authorization) return res.status(401).json({ erro: 'Nenhum token encontrado.' });
+    const token = req.headers.authorization.replace('Bearer ', '');
+    jwt.verify(token, secret, function (err, data) {
+        if (err) return res.status(500).json({ erro: 'Falha ao autenticar token.' });
+        req.token = token;
+        req.data = data;
+        next();
+    });
+}
 
 app.use(express.json());
 app.use(express.static(path.join(__dirname, '/view/build/')));
 app.use(express.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-app.post('/usuario', async (req, res) => {
+app.post('/usuario/cadastrar', async (req, res) => {
     try {
         const { email, senha, nome, tipo } = req.body;
         const usuario = new Usuario(email, senha, nome, tipo);
@@ -25,9 +38,18 @@ app.post('/usuario', async (req, res) => {
 app.post('/usuario/logar', async (req, res) => {
     try {
         const { email, senha } = req.body;
-        const usuario = new Usuario(email, senha);
-        const result = await usuario.logar();
-        res.status(200).json(result);
+        const usuario = await new Usuario(email, senha).logar();
+        const token = jwt.sign({ usuario }, secret)
+        res.status(200).json({ usuario, auth: true, token });
+    } catch (e) {
+        res.status(403).json({ erro: e.message, auth: false });
+    }
+});
+
+app.get('/usuario/', verifyJWT, async (req, res) => {
+    try {
+        const result = await new Usuario().buscar({ _id: req.data.usuario._id });
+        res.status(200).json(result[0]);
     } catch (e) {
         res.status(500).json({ erro: e.message });
     }

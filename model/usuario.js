@@ -41,6 +41,7 @@ module.exports = class Usuario {
     }
 
     async buscar(busca) {
+        if (busca._id && typeof busca._id != ObjectId) busca._id = new ObjectId(busca._id);
         const result = await bd.buscar(colecao, busca);
         if (result.length == 0) throw new Error('Nenhum usuário encontrado');
         const usuarios = [];
