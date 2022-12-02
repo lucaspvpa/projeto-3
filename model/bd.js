@@ -2,13 +2,13 @@ const { MongoClient, ServerApiVersion, GridFSBucket, ObjectId } = require('mongo
 const { GridFsStorage } = require("multer-gridfs-storage");
 const multer = require('multer');
 
-const url = 'mongodb+srv://MdbAdmin:uakCmo8W7bQcVlVI@cluster0.nrrlvmq.mongodb.net/';//????????????????????
+const url = 'mongodb+srv://root:rootAdmin@pw3.ylhqytp.mongodb.net/';
 const banco = 'PW3';
 const bucketName = 'ARQUIVOS';
 
 const data = `${new Date().getDate()}-${new Date().getMonth() + 1}-${new Date().getFullYear()}`;
 
-const client = new MongoClient(url, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
+const client = new MongoClient(url + '?retryWrites=true&w=majority', { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 const bd = client.db(banco)
 const storage = new GridFsStorage({
     url: url + banco,
