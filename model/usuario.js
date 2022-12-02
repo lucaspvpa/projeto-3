@@ -17,11 +17,15 @@ module.exports = class Usuario {
         if (this.email.length == 0) throw new Error('Email inválido');
         if (this.senha.length < 3) throw new Error('Senha muito curta');
         if (this.tipo != 'usuario' && this.tipo != 'admin') throw new Error('Tipo inválido');
-        let result = await this.buscar({ email: this.email });
-        if (result.length > 0) throw new Error('Email já cadastrado');
+        let result
+        try {
+            result = await this.buscar({ email: this.email });
+            if (result.length > 0) throw new Error('Email já cadastrado');
+        } catch (e) {
+            if (e.message != 'Nenhum usuário encontrado') throw e;
+        }
         result = await bd.criar(colecao, this);
         if (result.acknowledged) return new Usuario(this.email, this.senha, this.nome, this.tipo, result.insertedId);
-
         throw new Error('Erro ao cadastrar usuário');
     }
 

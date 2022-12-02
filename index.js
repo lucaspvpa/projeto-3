@@ -12,24 +12,37 @@ app.use(express.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 app.post('/usuario', async (req, res) => {
-    const { nome, email, senha } = req.body;
-    const usuario = new Usuario(nome, email, senha);
-    const result = await usuario.cadastrar();
-    res.send(result);
+    try {
+        const { email, senha, nome, tipo } = req.body;
+        const usuario = new Usuario(email, senha, nome, tipo);
+        const result = await usuario.cadastrar();
+        res.status(200).json(result);
+    } catch (e) {
+        res.status(500).json({ erro: e.message });
+    }
 });
 
 app.post('/usuario/logar', async (req, res) => {
-    const { email, senha } = req.body;
-    const usuario = new Usuario(undefined, email, senha);
-    const result = await usuario.logar();
-    res.send(result);
+    try {
+        const { email, senha } = req.body;
+        const usuario = new Usuario(email, senha);
+        const result = await usuario.logar();
+        res.status(200).json(result);
+    } catch (e) {
+        res.status(500).json({ erro: e.message });
+    }
 });
 
 app.post('/publicacao', async (req, res) => {
-    const { titulo, texto, arquivo, autor } = req.body;
-    const publicacao = new Publicacao(titulo, texto, arquivo, autor);
-    const result = await publicacao.publicar();
-    res.send(result);
+    try {
+        const { titulo, texto, arquivo } = req.body;
+        const autor = undefined
+        // const publicacao = new Publicacao(titulo, texto, arquivo, autor);
+        const result = await publicacao.publicar();
+        res.send(result);
+    } catch (e) {
+        res.send(e.message);
+    }
 });
 
 app.get('/publicacao', async (req, res) => {
@@ -49,6 +62,17 @@ app.delete('/publicacao/:id', async (req, res) => {
     res.send(result);
 });
 
-app.listen(5000, () => console.log(`http://localhost:5000/`));
+
+(async () => {
+    try {
+        console.log(
+            // await new Usuario().deletarPublicacao('638a0ccfe16ca1acb08f64e3', '638a067596d14da319ae3a6c')
+        )
+    } catch (e) {
+        console.log(e);
+    }
+})();
+
+app.listen(5000);
 
 module.exports = app;
