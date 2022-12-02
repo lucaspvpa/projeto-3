@@ -152,30 +152,33 @@ header img {
 	background-color: rgba(0, 0, 0, 0.6);
 }
 
-.login-screen {
+.login-screen,
+.register-screen {
 	position: relative;
 	background-color: #fff;
 	border: 1px solid #000;
 	width: 450px;
-	height: 450px;
-	margin-top: -250px;
 	border-radius: 6px;
+	margin-top: -130px;
 }
 
-.login-screen div {
+.login-screen div,
+.register-screen div {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
 	padding: 20px 32px;
 }
 
-.login-screen div h1 {
+.login-screen div h1,
+.register-screen div h1 {
 	width: 100%;
 	text-align: center;
 	padding-left: 20px;
 }
 
-.login-screen div button {
+.login-screen div button,
+.register-screen div button {
 	background-color: #007398;
 	border: none;
 	color: white;
@@ -185,38 +188,49 @@ header img {
 	cursor: pointer;
 }
 
-.login-screen div button:hover {
+.login-screen div button:hover,
+.register-screen div button:hover {
 	background-color: #fff;
 	color: #007398;
 }
 
-.login-screen .form {
+.login-screen .form,
+.register-screen .form {
 	display: flex;
 	flex-direction: column;
 	gap: 40px;
 	width: 100%;
 	margin-top: 20px;
+	margin-bottom: 20px;
+
 }
 
-.login-screen .form input {
+.login-screen .form input,
+.register-screen .form input {
 	padding: 10px 20px;
 	border: 1px solid #000;
 	border-radius: 5px;
 	font-size: large;
 	width: 100%;
 	outline: none;
-
 }
 
-.login-screen .form p {
+.login-screen div .space-between,
+.register-screen div .space-between {
+	padding: 0;
+}
+
+.login-screen .form p,
+.register-screen .form p {
 	position: absolute;
-	top: 250px;
+	top: 255px;
 	font-size: 20px;
 	font-weight: 600;
 	color: red
 }
 
-.login-screen .form button {
+.login-screen .form button,
+.register-screen .form button {
 	background-color: #007398;
 	border: none;
 	color: white;
@@ -225,7 +239,6 @@ header img {
 	border-radius: 5px;
 	border: 2px solid #007398;
 	font-size: large;
-	margin-top: 50px;
 	cursor: pointer;
 }
 

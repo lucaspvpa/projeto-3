@@ -14,29 +14,29 @@ function API() {
             const temp = [...new Set(sugestoes)]
             setSugestoes(temp)
         }
-    }, [next]);
-    useEffect(() => {
-        if (next !== undefined && next !== null) {
-            fetch(next, {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json"
-                }
-            }).then(response => response.json()).then(data => {
-                if (data.error) {
-                    return
-                }
-                var temp = []
-                if (data.results.length > 0) {
-                    data.results.forEach(result => {
-                        temp.push(result.name)
-                    });
-                    setSugestoes([...sugestoes, ...temp])
-                }
-                setNext(data.info.next)
-            })
-        }
-    }, [next]);
+    }, [next, sugestoes])
+    // useEffect(() => {
+    //     if (next !== undefined && next !== null) {
+    //         fetch(next, {
+    //             method: "GET",
+    //             headers: {
+    //                 "Content-Type": "application/json"
+    //             }
+    //         }).then(response => response.json()).then(data => {
+    //             if (data.error) {
+    //                 return
+    //             }
+    //             var temp = []
+    //             if (data.results.length > 0) {
+    //                 data.results.forEach(result => {
+    //                     temp.push(result.name)
+    //                 });
+    //                 setSugestoes([...sugestoes, ...temp])
+    //             }
+    //             setNext(data.info.next)
+    //         })
+    //     }
+    // }, [next]);
     useEffect(() => {
         setNext(`https://rickandmortyapi.com/api/character/`)
     }, []);
@@ -99,6 +99,8 @@ function API() {
                             sugestaoHandler(sugestao)
                         }}
                         >{sugestao}</div>
+                    } else {
+                        return null
                     }
                 })}
             </div>

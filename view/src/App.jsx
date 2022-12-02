@@ -9,11 +9,14 @@ function App() {
 	const [loginScreenOn, setLoginScreenOn] = useState(false);
 	useEffect(() => {
 		if (token) {
-			fetch(`https://reqres.in/api/users/${token.replace('QpwL5tke4Pnpja7X', '')}`,
+			fetch(`/usuario`,
 				{
 					method: "GET",
-					headers: { "Content-Type": "application/json" },
-				}).then(res => res.json()).then(info => setUser(info.data))
+					headers: {
+						"Content-Type": "application/json",
+						"Authorization": `Bearer ${token}`
+					},
+				}).then(res => res.json()).then(info => setUser(info))
 		}
 	}, [token]);
 	return !isLogged ? (
@@ -110,8 +113,7 @@ function App() {
 				</svg>
 			</div>
 			<div className="user">
-				<img src={user.avatar} alt="Foto" />
-				<p>{user.first_name} {user.last_name}</p>
+				<p>{user.nome}</p>
 				<button onClick={() => {
 					setIsLogged(false);
 					localStorage.removeItem("token");
