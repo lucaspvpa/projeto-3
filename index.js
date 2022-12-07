@@ -12,7 +12,7 @@ function verifyJWT(req, res, next) {
     if (!req.headers.authorization) return res.status(401).json({ erro: 'Nenhum token encontrado.' });
     const token = req.headers.authorization.replace('Bearer ', '');
     jwt.verify(token, secret, function (err, data) {
-        if (err) return res.status(500).json({ erro: 'Falha ao autenticar token.' });
+        if (err) return res.status(400).json({ erro: 'Falha ao autenticar token.' });
         req.token = token;
         req.data = data;
         next();
@@ -27,11 +27,10 @@ app.use(bodyParser.json());
 app.post('/usuario/cadastrar', async (req, res) => {
     try {
         const { email, senha, nome, tipo } = req.body;
-        const usuario = new Usuario(email, senha, nome, tipo);
-        const result = await usuario.cadastrar();
+        const result = await new Usuario(email, senha, nome, tipo).cadastrar();
         res.status(200).json(result);
     } catch (e) {
-        res.status(500).json({ erro: e.message });
+        res.status(400).json({ erro: e.message });
     }
 });
 
@@ -51,7 +50,7 @@ app.get('/usuario/', verifyJWT, async (req, res) => {
         const result = await new Usuario().buscar({ _id: req.data.usuario._id });
         res.status(200).json(result[0]);
     } catch (e) {
-        res.status(500).json({ erro: e.message });
+        res.status(400).json({ erro: e.message });
     }
 });
 

@@ -25,7 +25,11 @@ module.exports = class Usuario {
             if (e.message != 'Nenhum usuário encontrado') throw e;
         }
         result = await bd.criar(colecao, this);
-        if (result.acknowledged) return new Usuario(this.email, this.senha, this.nome, this.tipo, result.insertedId);
+        if (result.acknowledged) {
+            const usuario = new Usuario(this.email, this.senha, this.nome, this.tipo, result.insertedId);
+            delete usuario.senha;
+            return usuario;
+        }
         throw new Error('Erro ao cadastrar usuário');
     }
 
