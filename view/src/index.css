@@ -188,6 +188,11 @@ header img {
 	cursor: pointer;
 }
 
+h4 {
+	width: fit-content;
+	margin: auto;
+}
+
 .login-screen div button:hover,
 .register-screen div button:hover {
 	background-color: #fff;
@@ -220,13 +225,27 @@ header img {
 	padding: 0;
 }
 
-.login-screen .form p,
-.register-screen .form p {
+.login-screen .form p {
 	position: absolute;
 	top: 255px;
 	font-size: 20px;
 	font-weight: 600;
 	color: red
+}
+
+.register-screen .form p {
+	position: absolute;
+	top: 380px;
+	font-size: 20px;
+	font-weight: 600;
+	color: red
+}
+
+.checkbox-admin {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	margin-top: -40px;
 }
 
 .login-screen .form button,
