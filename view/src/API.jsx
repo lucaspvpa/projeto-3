@@ -1,113 +1,58 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 function API() {
     const placeholder = "/placeholder.png";
+    const token = localStorage.getItem("token");
     const [busca, setBusca] = useState("");
-    const [imagemURL, setImagemURL] = useState("");
     const [erro, setErro] = useState("");
-    const [sugestoes, setSugestoes] = useState([]);
-    const [next, setNext] = useState(null);
-    const [searchBarFocus, setSearchBarFocus] = useState(false);
-    const [sugestoesFocus, setSugestoesFocus] = useState(false);
-    useEffect(() => {
-        if (sugestoes.length > 0) {
-            const temp = [...new Set(sugestoes)]
-            setSugestoes(temp)
-        }
-    }, [next, sugestoes])
-    // useEffect(() => {
-    //     if (next !== undefined && next !== null) {
-    //         fetch(next, {
-    //             method: "GET",
-    //             headers: {
-    //                 "Content-Type": "application/json"
-    //             }
-    //         }).then(response => response.json()).then(data => {
-    //             if (data.error) {
-    //                 return
-    //             }
-    //             var temp = []
-    //             if (data.results.length > 0) {
-    //                 data.results.forEach(result => {
-    //                     temp.push(result.name)
-    //                 });
-    //                 setSugestoes([...sugestoes, ...temp])
-    //             }
-    //             setNext(data.info.next)
-    //         })
-    //     }
-    // }, [next]);
-    useEffect(() => {
-        setNext(`https://rickandmortyapi.com/api/character/`)
-    }, []);
+    const [resultados, setResultados] = useState([]);
     function buttonHandler() {
         if (busca.length < 3) {
             setErro("Digite pelo menos 3 caracteres");
             return
         }
-        fetch(`https://rickandmortyapi.com/api/character/?name=${busca}`, {
-            method: "GET",
-            headers: { "Content-Type": "application/json" }
-        }).then(response => response.json()).then(data => {
-            if (data.error) {
-                setErro(data.error);
-                return
-            }
-            if (data.results[0].image) {
-                setImagemURL(data.results[0].image)
-                setErro("")
-                return
-            }
-            setErro("Erro desconhecido");
-        })
-    }
-    function sugestaoHandler(prop) {
-        fetch(`https://rickandmortyapi.com/api/character/?name=${prop}`, {
+        fetch(`/publicacao/${busca}`, {
             method: "GET",
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
             }
         }).then(response => response.json()).then(data => {
-            if (data.error) {
-                setErro(data.error);
-                return
+            if (data.erro) {
+                setErro(data.erro);
+                return;
+            } else {
+                if (data.length === 0) {
+                    setErro("Nenhum resultado encontrado");
+                    return;
+                } else {
+                    setErro("");
+                    setResultados(data);
+                }
             }
-            if (data.results[0].image) {
-                setImagemURL(data.results[0].image)
-                setErro("")
-                return
-            }
-            setErro("Erro desconhecido");
         })
     }
     return (
         <div className="busca">
-            <div className="opcoes"><p>Busque por um personagem usando o nome em inglês... Ex.: Cool Rick ou Evil Morty</p> </div>
+            <div className="opcoes"><p>Busque por uma publicação</p> </div>
             <br></br>
             <div className="campos-busca">
-                <input placeholder="Buscar imagem de um personagem de Rick and Morty" type="text" value={busca}
-                    onFocus={() => { setSearchBarFocus(true) }} onBlur={() => { setSearchBarFocus(false) }} onChange={(e) => setBusca(e.target.value)} />
+                <input placeholder="Busque por um título ou descrição" type="text" value={busca}
+                    onChange={(e) => setBusca(e.target.value)} />
                 <button type="button" onClick={() => buttonHandler()}>Buscar</button>
-                <div className={(busca !== "" && (searchBarFocus || sugestoesFocus)) ? "sugestoes" : ""} onMouseOver={() => { setSugestoesFocus(true) }} onMouseLeave={() => { setSugestoesFocus(false) }}>
-                    {(busca !== "" && (searchBarFocus || sugestoesFocus)) && sugestoes.map((sugestao, index) => {
-                        if (sugestao.toLowerCase().startsWith(busca.toLowerCase())) {
-                            return <div key={index} className="sugestao" onClick={() => {
-                                setBusca(sugestao)
-                                setSugestoesFocus(false)
-                                setSearchBarFocus(false)
-                                sugestaoHandler(sugestao)
-                            }}
-                            >{sugestao}</div>
-                        } else {
-                            return null
-                        }
-                    })}
-                </div>
             </div>
             {erro !== "" && <p className="erro-busca">{erro}</p>}
-            <div className="imagem-container">
+            {resultados.map((resultado, index) => {
+                return (
+                    <div className="resultado-busca">
+                        <p className="titulo-busca">{resultado.titulo}</p>
+                        <p className="texto-busca">{resultado.texto}</p>
+                    </div>
+                )
+            })}
+            {/* <div className="imagem-container">
                 <img className="imagem-busca" src={imagemURL || placeholder} alt="Imagem" />
-            </div>
+            </div> */}
         </div >
     )
 }
