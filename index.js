@@ -54,20 +54,20 @@ app.get('/usuario/', verifyJWT, async (req, res) => {
     }
 });
 
-app.post('/publicacao', verifyJWT, bd.enviarArquivo.single("arquivo"), async (req, res) => {
+app.post('/publicacao', verifyJWT, bd.enviarArquivo, async (req, res) => {
     try {
         const { titulo, texto } = req.body;
         const result = await new Usuario().publicar(titulo, texto, req.file.id, req.data.usuario._id);
         res.status(200).send(result);
     } catch (e) {
-        res.send(e.message);
+        res.json({ erro: e.message });
     }
 });
 
-app.get('/publicacao', async (req, res) => {
-    const result = await bd.buscar('PUBLICACAO', {});
-    res.send(result);
-});
+// app.get('/publicacao', async (req, res) => {
+//     const result = await bd.buscar('PUBLICACAO', {});
+//     res.send(result);
+// });
 
 app.get('/publicacao/:busca', verifyJWT, async (req, res) => {
     try {
@@ -76,15 +76,17 @@ app.get('/publicacao/:busca', verifyJWT, async (req, res) => {
         const result = await new Publicacao().buscar(query);
         res.status(200).json(result);
     } catch (e) {
-        res.send(e.message);
+        res.json({ erro: e.message });
     }
 });
 
-app.delete('/publicacao/:id', async (req, res) => {
-    const id = req.params.id;
-    const result = await bd.deletar('PUBLICACAO', { _id: new ObjectId(id) });
-    res.send(result);
-});
+// app.delete('/publicacao/:id', async (req, res) => {
+//     const id = req.params.id;
+//     const result = await bd.deletar('PUBLICACAO', { _id: new ObjectId(id) });
+//     res.send(result);
+// });
+
+app.get("/arquivo/:_id", verifyJWT, bd.buscarArquivo);
 
 app.listen(5000);
 

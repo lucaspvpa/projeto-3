@@ -1,5 +1,6 @@
 const { MongoClient, ServerApiVersion, GridFSBucket, ObjectId } = require('mongodb');
 const { GridFsStorage } = require("multer-gridfs-storage");
+const util = require('util');
 const multer = require('multer');
 
 const url = 'mongodb+srv://root:rootAdmin@pw3.ylhqytp.mongodb.net/';
@@ -16,7 +17,7 @@ const storage = new GridFsStorage({
     file: (req, file) => { return { bucketName, filename: `${data}-${file.originalname.replace(' ', '_')}`, }; }
 });
 
-module.exports.enviarArquivo = multer({ storage });
+module.exports.enviarArquivo = util.promisify(multer({ storage }).single("arquivo"));
 
 module.exports.criar = async (colecao, objeto) => {
     const result = await bd.collection(colecao).insertOne(objeto);
@@ -39,7 +40,7 @@ module.exports.deletar = async (colecao, busca) => {
 }
 module.exports.buscarArquivo = async (req, res) => {
     try {
-        const id = req.body._id || req.query._id || req.params._id//mudar isso aqui
+        const id = req.params._id
         const _id = new ObjectId(id)
         if (!_id) {
             res.status(400).send({ erro: "_id faltando" })
@@ -53,7 +54,6 @@ module.exports.buscarArquivo = async (req, res) => {
             res.contentType(arquivo[0].contentType);
         }).finally(() => {
             const bucket = new GridFSBucket(bd, { bucketName });
-
             return new Promise(() => {
                 const stream = bucket.openDownloadStream(_id)
                 stream.on("data", data => res.status(200).write(data));
