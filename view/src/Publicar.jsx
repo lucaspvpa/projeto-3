@@ -17,6 +17,9 @@ function Publicar() {
                 <input type="file" accept="image/*, video/*" value={inputArquivo} onChange={(e) => {
                     if (e.target.files[0].size > 4718592) {
                         setErro('Limite de tamanho de arquivo de no máximo: 4.5MB.')
+                        setInputArquivo("");
+                        setArquivo();
+                        setPrevia("");
                         return;
                     }
                     setInputArquivo(e.target.value)
@@ -49,7 +52,7 @@ function Publicar() {
                     }).then(response => {
                         const status = response.status
                         response.json().then(res => {
-                            if (status === 200 || !res.erro) {
+                            if (status === 200 && !res.erro) {
                                 setTitulo("");
                                 setTexto("");
                                 setInputArquivo("");

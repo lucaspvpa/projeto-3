@@ -131,8 +131,7 @@ function App() {
 				<div className="bar"></div>
 			</div>
 		</header>
-		{publicar ? <Publicar /> : <API />
-		}
+		{user.tipo !== "admin" ? <API /> : publicar ? <Publicar /> : <API />}
 	</>);
 }
 

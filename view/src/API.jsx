@@ -15,10 +15,11 @@ function API() {
                     "Authorization": `Bearer ${token}`
                 }
             }).then(response => response.blob()).then(data => {
-                setPublicacao([...publicacao, { publicacao: resultado, blob: URL.createObjectURL(data), type: data.type }])
+                setPublicacao(p => [...p, { publicacao: resultado, blob: URL.createObjectURL(data), type: data.type }]);
+                // [...publicacao, { publicacao: resultado, blob: URL.createObjectURL(data), type: data.type }])
             })
         })
-    }, [resultados])
+    }, [resultados, token])
     function buttonHandler() {
         setPublicacao([]);
         if (busca.length < 3) {
@@ -41,7 +42,10 @@ function API() {
                     return;
                 } else {
                     setErro("");
-                    setResultados(data);
+                    setResultados(data.result);
+                    if (data.token) {
+                        localStorage.setItem("token", data.token);
+                    }
                 }
             }
         })
