@@ -42,8 +42,12 @@ module.exports = class Usuario {
 
         const usuario = new Usuario(result[0].email, result[0].senha, result[0].nome, result[0].tipo, result[0].visualizacoes, result[0]._id);
         delete usuario.senha;
-        const publicacoes = await new Publicacao().buscar({ autor: usuario._id });
-        return { usuario, publicacoes: publicacoes.length };
+        try {
+            const publicacoes = await new Publicacao().buscar({ autor: usuario._id });
+            return { usuario, publicacoes: publicacoes.length };
+        } catch (e) {
+            return { usuario, publicacoes: 0 };
+        }
     }
 
     async buscar(busca) {
@@ -53,9 +57,14 @@ module.exports = class Usuario {
         const usuarios = [];
         for (let i = 0; i < result.length; i++) {
             const usuario = new Usuario(result[i].email, result[i].senha, result[i].nome, result[i].tipo, result[i].visualizacoes, result[i]._id);
-            const publicacoes = await new Publicacao().buscar({ autor: usuario._id });
-            delete usuario.senha;
-            usuarios.push({ usuario, publicacoes: publicacoes.length });
+            try {
+                const publicacoes = await new Publicacao().buscar({ autor: usuario._id });
+                delete usuario.senha;
+                usuarios.push({ usuario, publicacoes: publicacoes.length });
+            } catch (e) {
+                delete usuario.senha;
+                usuarios.push({ usuario, publicacoes: 0 });
+            }
         }
         return usuarios;
     }
