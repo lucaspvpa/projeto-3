@@ -45,9 +45,9 @@ module.exports.buscarArquivo = async (req, res) => {
             res.status(400).send({ erro: "_id faltando" })
             return;
         }
-        this.buscar('File.files', { _id }).then((arquivo) => {
+        this.buscar(`${bucketName}.files`, { _id }).then((arquivo) => {
             if (arquivo.length == 0) {
-                res.status(404).send({ erro: "Arquivo não encontrado." })
+                res.status(404).send({ erro: "Não encontrado." })
                 return;
             }
             res.contentType(arquivo[0].contentType);

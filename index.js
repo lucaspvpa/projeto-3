@@ -54,13 +54,11 @@ app.get('/usuario/', verifyJWT, async (req, res) => {
     }
 });
 
-app.post('/publicacao', async (req, res) => {
+app.post('/publicacao', verifyJWT, bd.enviarArquivo.single("arquivo"), async (req, res) => {
     try {
-        const { titulo, texto, arquivo } = req.body;
-        const autor = undefined
-        // const publicacao = new Publicacao(titulo, texto, arquivo, autor);
-        const result = await publicacao.publicar();
-        res.send(result);
+        const { titulo, texto } = req.body;
+        const result = await new Usuario().publicar(titulo, texto, req.file.id, req.data.usuario._id);
+        res.status(200).send(result);
     } catch (e) {
         res.send(e.message);
     }
@@ -82,17 +80,6 @@ app.delete('/publicacao/:id', async (req, res) => {
     const result = await bd.deletar('PUBLICACAO', { _id: new ObjectId(id) });
     res.send(result);
 });
-
-
-(async () => {
-    try {
-        console.log(
-            // await new Usuario().deletarPublicacao('638a0ccfe16ca1acb08f64e3', '638a067596d14da319ae3a6c')
-        )
-    } catch (e) {
-        console.log(e);
-    }
-})();
 
 app.listen(5000);
 
