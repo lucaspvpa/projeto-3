@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import API from "./API";
+import Publicar from "./Publicar";
 import LoginScreen from "./LoginScreen";
 
 function App() {
@@ -7,6 +8,7 @@ function App() {
 	const [user, setUser] = useState({});
 	const [isLogged, setIsLogged] = useState(token ? true : false);
 	const [loginScreenOn, setLoginScreenOn] = useState(false);
+	const [publicar, setPublicar] = useState(false);
 	useEffect(() => {
 		if (token) {
 			fetch(`/usuario`,
@@ -113,7 +115,11 @@ function App() {
 				</svg>
 			</div>
 			<div className="user">
+				<img src='./placeholder-perfil.jpg' alt="Foto" />
 				<p>{user.nome}</p>
+				{user.tipo === "admin" && <button onClick={() => {
+					setPublicar(!publicar);
+				}}>{publicar ? "Buscar" : "Publicar"}</button>}
 				<button onClick={() => {
 					setIsLogged(false);
 					localStorage.removeItem("token");
@@ -125,7 +131,8 @@ function App() {
 				<div className="bar"></div>
 			</div>
 		</header>
-		<API />
+		{publicar ? <Publicar /> : <API />
+		}
 	</>);
 }
 

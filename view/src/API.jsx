@@ -47,9 +47,7 @@ function API() {
         }
         fetch(`https://rickandmortyapi.com/api/character/?name=${busca}`, {
             method: "GET",
-            headers: {
-                "Content-Type": "application/json"
-            }
+            headers: { "Content-Type": "application/json" }
         }).then(response => response.json()).then(data => {
             if (data.error) {
                 setErro(data.error);
@@ -82,33 +80,35 @@ function API() {
             setErro("Erro desconhecido");
         })
     }
-    return (<div className="busca">
-        <div className="opcoes"><p>Busque por um personagem usando o nome em inglês... Ex.: Cool Rick ou Evil Morty</p> </div>
-        <br></br>
-        <div className="campos-busca">
-            <input placeholder="Buscar imagem de um personagem de Rick and Morty" type="text" value={busca}
-                onFocus={() => { setSearchBarFocus(true) }} onBlur={() => { setSearchBarFocus(false) }} onChange={(e) => setBusca(e.target.value)} />
-            <button type="button" onClick={() => buttonHandler()}>Buscar</button>
-            <div className={(busca !== "" && (searchBarFocus || sugestoesFocus)) ? "sugestoes" : ""} onMouseOver={() => { setSugestoesFocus(true) }} onMouseLeave={() => { setSugestoesFocus(false) }}>
-                {(busca !== "" && (searchBarFocus || sugestoesFocus)) && sugestoes.map((sugestao, index) => {
-                    if (sugestao.toLowerCase().startsWith(busca.toLowerCase())) {
-                        return <div key={index} className="sugestao" onClick={() => {
-                            setBusca(sugestao)
-                            setSugestoesFocus(false)
-                            setSearchBarFocus(false)
-                            sugestaoHandler(sugestao)
-                        }}
-                        >{sugestao}</div>
-                    } else {
-                        return null
-                    }
-                })}
+    return (
+        <div className="busca">
+            <div className="opcoes"><p>Busque por um personagem usando o nome em inglês... Ex.: Cool Rick ou Evil Morty</p> </div>
+            <br></br>
+            <div className="campos-busca">
+                <input placeholder="Buscar imagem de um personagem de Rick and Morty" type="text" value={busca}
+                    onFocus={() => { setSearchBarFocus(true) }} onBlur={() => { setSearchBarFocus(false) }} onChange={(e) => setBusca(e.target.value)} />
+                <button type="button" onClick={() => buttonHandler()}>Buscar</button>
+                <div className={(busca !== "" && (searchBarFocus || sugestoesFocus)) ? "sugestoes" : ""} onMouseOver={() => { setSugestoesFocus(true) }} onMouseLeave={() => { setSugestoesFocus(false) }}>
+                    {(busca !== "" && (searchBarFocus || sugestoesFocus)) && sugestoes.map((sugestao, index) => {
+                        if (sugestao.toLowerCase().startsWith(busca.toLowerCase())) {
+                            return <div key={index} className="sugestao" onClick={() => {
+                                setBusca(sugestao)
+                                setSugestoesFocus(false)
+                                setSearchBarFocus(false)
+                                sugestaoHandler(sugestao)
+                            }}
+                            >{sugestao}</div>
+                        } else {
+                            return null
+                        }
+                    })}
+                </div>
             </div>
-        </div>
-        {erro !== "" && <p className="erro-busca">{erro}</p>}
-        <div className="imagem-container">
-            <img className="imagem-busca" src={imagemURL || placeholder} alt="Imagem" />
-        </div>
-    </div >)
+            {erro !== "" && <p className="erro-busca">{erro}</p>}
+            <div className="imagem-container">
+                <img className="imagem-busca" src={imagemURL || placeholder} alt="Imagem" />
+            </div>
+        </div >
+    )
 }
 export default API;

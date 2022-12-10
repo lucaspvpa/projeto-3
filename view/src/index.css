@@ -22,6 +22,67 @@ header img {
 	height: 48px;
 }
 
+.Publicar {
+	width: 50%;
+	margin: 40px auto;
+}
+
+.form-Publicar {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+	gap: 10px;
+	align-content: center;
+	flex-wrap: wrap;
+	align-items: center;
+	padding-bottom: 35px;
+}
+
+.Publicar h1 {
+	width: fit-content;
+	margin: 20px auto;
+}
+
+.form-Publicar-input {
+	width: 80%;
+	padding: 10px 20px;
+	border: 1px solid #000;
+	border-radius: 5px;
+	font-size: 20px;
+	font-weight: 600;
+}
+
+.form-Publicar button {
+	width: 40%;
+	padding: 10px 20px;
+	border: 1px solid #000;
+	border-radius: 5px;
+	font-size: 20px;
+	font-weight: 600;
+	background-color: #007398;
+	color: #fff;
+	cursor: pointer;
+}
+
+.form-Publicar button:hover {
+	background-color: #fff;
+	color: #007398;
+}
+
+.form-Publicar p {
+	position: absolute;
+	bottom: 0;
+	font-size: 20px;
+	font-weight: 600;
+	color: red;
+}
+
+.form-Publicar img,
+.form-Publicar video {
+	width: 50%;
+}
+
 .sugestoes {
 	background-color: #e6e6e6e6;
 	position: absolute;
@@ -115,6 +176,7 @@ header img {
 }
 
 .user img {
+	border-radius: 50%;
 	margin-right: 15px;
 }
 
@@ -128,10 +190,12 @@ header img {
 .user button {
 	background-color: #F5F5F5;
 	border: 2px solid #007398;
-	padding: 5px 30px;
+	padding: 5px 20px;
+	margin: 0 10px 0 10px;
 	font-family: NexusSans;
 	font-size: 18px;
 	cursor: pointer;
+	width: 104px;
 }
 
 .user button:hover {
