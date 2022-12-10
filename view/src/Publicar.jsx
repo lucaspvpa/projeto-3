@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-function Publicar() {
+function Publicar(props) {
     const token = localStorage.getItem("token");
     const [titulo, setTitulo] = useState("");
     const [texto, setTexto] = useState("");
@@ -59,6 +59,7 @@ function Publicar() {
                                 setArquivo();
                                 setPrevia("");
                                 setErro("Enviado com sucesso");
+                                props.setForceAttUser(props.forceAttUser + 1)
                             } else {
                                 setErro(res.erro);
                             }

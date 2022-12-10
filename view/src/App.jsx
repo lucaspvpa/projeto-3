@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import API from "./API";
+import Buscar from "./Buscar";
 import Publicar from "./Publicar";
 import LoginScreen from "./LoginScreen";
 
@@ -9,6 +9,8 @@ function App() {
 	const [isLogged, setIsLogged] = useState(token ? true : false);
 	const [loginScreenOn, setLoginScreenOn] = useState(false);
 	const [publicar, setPublicar] = useState(false);
+	console.log(user);
+	const [forceAttUser, setForceAttUser] = useState(0);
 	useEffect(() => {
 		if (token) {
 			fetch(`/usuario`,
@@ -20,7 +22,7 @@ function App() {
 					},
 				}).then(res => res.json()).then(info => setUser(info))
 		}
-	}, [token]);
+	}, [token, forceAttUser]);
 	return !isLogged ? (
 		<div className="App">
 			<header>
@@ -131,7 +133,13 @@ function App() {
 				<div className="bar"></div>
 			</div>
 		</header>
-		{user.tipo !== "admin" ? <API /> : publicar ? <Publicar /> : <API />}
+		<div className="userPubInfo">
+			<p>Publicações: {user.publicacoes}</p>
+			<p>Publicações visualizadas: {user.visualizacoes}</p>
+		</div>
+		{user.tipo !== "admin" ? <Buscar {...{ setForceAttUser, forceAttUser }} /> :
+			publicar ? <Publicar {...{ setForceAttUser, forceAttUser }} /> :
+				<Buscar {...{ setForceAttUser, forceAttUser }} />}
 	</>);
 }
 
