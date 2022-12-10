@@ -3,6 +3,11 @@
 	src: url('NexusSansTF-Regular.otf');
 }
 
+#root {
+	height: fit-content;
+	margin: 0 0 5rem 0;
+}
+
 * {
 	box-sizing: border-box;
 	margin: 0%;
@@ -83,6 +88,46 @@ header img {
 	width: 50%;
 }
 
+.resultado {
+	width: 100%;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+}
+
+.resultado-busca {
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.resultado-busca img,
+.resultado-busca video {
+	width: 50%;
+}
+
+
+.titulo-busca {
+	width: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	font-size: 2em;
+	font-weight: 600;
+	margin: .3em 0;
+}
+
+.texto-busca {
+	width: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	font-size: 1.4em;
+	font-weight: 400;
+	margin: .1em 0;
+}
+
 .sugestoes {
 	background-color: #e6e6e6e6;
 	position: absolute;
@@ -111,7 +156,6 @@ header img {
 
 .busca {
 	width: 100%;
-	height: 30em;
 	margin: auto;
 }
 

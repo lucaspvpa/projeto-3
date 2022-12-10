@@ -1,12 +1,26 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 function API() {
-    const placeholder = "/placeholder.png";
     const token = localStorage.getItem("token");
     const [busca, setBusca] = useState("");
     const [erro, setErro] = useState("");
     const [resultados, setResultados] = useState([]);
+    const [publicacao, setPublicacao] = useState([]);
+    useEffect(() => {
+        resultados.forEach(resultado => {
+            fetch(`/arquivo/${resultado.arquivo}`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                }
+            }).then(response => response.blob()).then(data => {
+                setPublicacao([...publicacao, { publicacao: resultado, blob: URL.createObjectURL(data), type: data.type }])
+            })
+        })
+    }, [resultados])
     function buttonHandler() {
+        setPublicacao([]);
         if (busca.length < 3) {
             setErro("Digite pelo menos 3 caracteres");
             return
@@ -42,17 +56,20 @@ function API() {
                 <button type="button" onClick={() => buttonHandler()}>Buscar</button>
             </div>
             {erro !== "" && <p className="erro-busca">{erro}</p>}
-            {resultados.map((resultado, index) => {
-                return (
-                    <div className="resultado-busca">
-                        <p className="titulo-busca">{resultado.titulo}</p>
-                        <p className="texto-busca">{resultado.texto}</p>
-                    </div>
-                )
-            })}
-            {/* <div className="imagem-container">
-                <img className="imagem-busca" src={imagemURL || placeholder} alt="Imagem" />
-            </div> */}
+            <div className="resultados">
+                {publicacao?.length > 0 ? publicacao?.map((i, index) => {
+                    return (
+                        <div className="resultado-busca" key={index}>
+                            <p className="titulo-busca">{i.publicacao.titulo}</p>
+                            <p className="texto-busca">{i.publicacao.texto}</p>
+                            {i.type.includes("image") ? <img src={i.blob} alt="Imagem" /> :
+                                i.type.includes("video") ? <video src={i.blob} controls></video> : <></>}
+
+                        </div>
+                    )
+                }) : null}
+            </div>
+
         </div >
     )
 }
