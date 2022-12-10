@@ -43,12 +43,12 @@ module.exports.buscarArquivo = async (req, res) => {
         const id = req.params._id
         const _id = new ObjectId(id)
         if (!_id) {
-            res.status(400).send({ erro: "_id faltando" })
+            res.status(400).json({ erro: "_id faltando" })
             return;
         }
         this.buscar(`${bucketName}.files`, { _id }).then((arquivo) => {
             if (arquivo.length == 0) {
-                res.status(404).send({ erro: "Não encontrado." })
+                res.status(404).json({ erro: "Não encontrado." })
                 return;
             }
             res.contentType(arquivo[0].contentType);
@@ -62,6 +62,6 @@ module.exports.buscarArquivo = async (req, res) => {
             })
         })
     } catch (erro) {
-        return res.status(500).send({ erro: erro.message ? erro.message : "Erro ao buscar arquivo." })
+        return res.status(500).json({ erro: erro.message ? erro.message : "Erro ao buscar arquivo." })
     }
 }
