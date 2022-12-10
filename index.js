@@ -69,10 +69,15 @@ app.get('/publicacao', async (req, res) => {
     res.send(result);
 });
 
-app.get('/publicacao/:busca', async (req, res) => {
-    const busca = req.params.busca;
-    const result = await bd.buscar('PUBLICACAO', { _id: new ObjectId(id) });
-    res.send(result);
+app.get('/publicacao/:busca', verifyJWT, async (req, res) => {
+    try {
+        const busca = req.params.busca;
+        const query = { $or: [{ titulo: { $regex: busca, $options: 'i' } }, { texto: { $regex: busca, $options: 'i' } }] }
+        const result = await new Publicacao().buscar(query);
+        res.status(200).json(result);
+    } catch (e) {
+        res.send(e.message);
+    }
 });
 
 app.delete('/publicacao/:id', async (req, res) => {
