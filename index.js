@@ -82,6 +82,6 @@ app.get('/publicacao/:busca', verifyJWT, async (req, res) => {
 
 app.get("/arquivo/:_id", verifyJWT, bd.buscarArquivo);
 
-app.listen(5000);
+app.listen(process.env.PORT || 5000);
 
 module.exports = app;
