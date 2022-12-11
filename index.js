@@ -1,6 +1,6 @@
-const path = require('path');
 const express = require('express');
 const app = express();
+const path = require('path');
 const bodyParser = require("body-parser");
 const Usuario = require('./model/usuario');
 const Publicacao = require('./model/publicacao');
@@ -19,6 +19,7 @@ function verifyJWT(req, res, next) {
     });
 }
 
+app.use(express.json());
 app.use(express.static(path.join(__dirname, '/view/build/')));
 app.use(express.urlencoded({ extended: false }));
 app.use(bodyParser.json());
