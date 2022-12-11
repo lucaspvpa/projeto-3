@@ -12,8 +12,7 @@ const data = `${new Date().getDate()}-${new Date().getMonth() + 1}-${new Date().
 const client = new MongoClient(url + '?retryWrites=true&w=majority', { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 const bd = client.db(banco)
 const storage = new GridFsStorage({
-    url: url + banco,
-    options: { useNewUrlParser: true, useUnifiedTopology: true },
+    bd,
     file: (req, file) => { return { bucketName, filename: `${data}-${file.originalname.replace(' ', '_')}`, }; }
 });
 
