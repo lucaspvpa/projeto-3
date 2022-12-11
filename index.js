@@ -19,7 +19,6 @@ function verifyJWT(req, res, next) {
     });
 }
 
-app.use(express.json());
 app.use(express.static(path.join(__dirname, '/view/build/')));
 app.use(express.urlencoded({ extended: false }));
 app.use(bodyParser.json());
