@@ -7,7 +7,7 @@
     "start": "nodemon index.js",
     "client": "npm start --prefix view",
     "dev": "concurrently \"npm run start\" \"npm run client\"",
-    "build-react": "npm run build --prefix view"
+    "build": "npm run build --prefix view"
   },
   "keywords": [],
   "author": "",
